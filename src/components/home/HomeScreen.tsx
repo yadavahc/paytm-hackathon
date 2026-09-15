@@ -25,6 +25,12 @@ export function HomeScreen() {
   const running = state.campaigns.find((c) => !c.seeded && c.status === "running");
   const done = state.campaigns.find((c) => !c.seeded && c.status === "completed");
   const karthik = state.blockedTransfers["b-karthik"];
+  // Payments collected in this session (verified with Paytm staging, or clearly simulated) count toward today.
+  const collected = state.payments.filter((p) => p.status === "TXN_SUCCESS");
+  const collectedTotal = collected.reduce((s, p) => s + p.amount, 0);
+  const todaySales = STORY.todaySales + collectedTotal;
+  const todayTxns = STORY.todayTxns + collected.length;
+  const todayUpi = STORY.todayUpi + collectedTotal;
 
   return (
     <div className="space-y-3.5 px-4 pb-2 pt-4">
@@ -44,17 +50,17 @@ export function HomeScreen() {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-muted">Today&apos;s sales · till now</p>
-            <p className="mt-0.5 text-[28px] font-extrabold leading-tight text-ink">{formatINR(STORY.todaySales)}</p>
+            <p className="mt-0.5 text-[28px] font-extrabold leading-tight text-ink">{formatINR(todaySales)}</p>
           </div>
           <Button size="sm" variant="ghost" onClick={() => navigate("sales")}>
             Sales
           </Button>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-3">
-          <Stat label="Transactions" value={String(STORY.todayTxns)} />
-          <Stat label="Avg. transaction value" value={formatINR(STORY.todaySales / STORY.todayTxns)} />
-          <Stat label="UPI received" value={formatINR(STORY.todayUpi)} sub={`${Math.round((STORY.todayUpi / STORY.todaySales) * 100)}% of sales`} />
-          <Stat label="Cash" value={formatINR(STORY.todayCash)} sub={`${Math.round((STORY.todayCash / STORY.todaySales) * 100)}% of sales`} />
+          <Stat label="Transactions" value={String(todayTxns)} sub={collected.length ? `+${collected.length} via QR` : undefined} />
+          <Stat label="Avg. transaction value" value={formatINR(todaySales / todayTxns)} />
+          <Stat label="UPI received" value={formatINR(todayUpi)} sub={`${Math.round((todayUpi / todaySales) * 100)}% of sales`} />
+          <Stat label="Cash" value={formatINR(STORY.todayCash)} sub={`${Math.round((STORY.todayCash / todaySales) * 100)}% of sales`} />
         </div>
       </Card>
 

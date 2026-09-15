@@ -119,6 +119,10 @@ export function SettingsScreen() {
               <span className="text-muted">Sarvam · speech</span>
               <Badge tone={health.voice ? "good" : "neutral"}>{health.voice ? "Connected" : "Simulated"}</Badge>
             </li>
+            <li className="flex items-center justify-between">
+              <span className="text-muted">Payments</span>
+              <Badge tone={health.payments ? "good" : "neutral"}>{health.payments ?? "Simulated"}</Badge>
+            </li>
           </ul>
           <p className="mt-2 text-[11.5px] text-faint">API keys stay on the server. Calculations are always deterministic; the AI never changes your data.</p>
         </Card>

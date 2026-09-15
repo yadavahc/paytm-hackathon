@@ -5,6 +5,7 @@ import { ChevronRight, Network, ScanLine, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ScreenHeader } from "@/components/app-shell/shell-bits";
 import { RiskView } from "@/components/chat/cards";
+import { ReceivePaymentCard } from "@/components/payments/ReceivePaymentCard";
 import { Button, Card, cn } from "@/components/ui/primitives";
 import { formatINR } from "@/lib/data/format";
 import { mulberry32 } from "@/lib/data/prng";
@@ -82,6 +83,8 @@ export function QrScreen() {
             </div>
           </div>
         </div>
+
+        <ReceivePaymentCard />
 
         <Card className="p-4">
           <h2 className="text-[15px] font-bold text-ink">Scan & check a QR</h2>

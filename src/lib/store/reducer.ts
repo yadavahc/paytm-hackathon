@@ -7,9 +7,9 @@ import { SEED_PRODUCTS } from "@/lib/data/products";
 import { applyStockLines } from "@/lib/inventory/inventory";
 import { returningCustomerOrder } from "@/lib/simulation/campaign";
 import { agentContext, currentCustomers, snapshotOf } from "./selectors";
-import type { AppState, AuditEntry, Campaign, CatalogItem, ChatMessage, DemoState, DocumentRecord, Learning, Route, Toast } from "./types";
+import type { AppState, AuditEntry, Campaign, CatalogItem, ChatMessage, DemoState, DocumentRecord, Learning, PaymentRecord, Route, Toast } from "./types";
 
-export const STATE_VERSION = 4;
+export const STATE_VERSION = 5;
 const DAY = 86400000;
 
 function seedCatalog(): CatalogItem[] {
@@ -109,6 +109,7 @@ export function createInitialState(): AppState {
     catalog: seedCatalog(),
     documents: SEED_DOCUMENT_IDS.map((id, i) => ({ id, sampleId: id, at: now - (20 + i * 30) * DAY, source: "sample" as const, appliedToStock: false })),
     savedInsights: [],
+    payments: [],
     audit: history.audit,
     learnings: history.learnings,
     calibration: 1,
@@ -144,6 +145,7 @@ export type Action =
   | { type: "TOGGLE_PUBLISH"; id: string }
   | { type: "ADD_DOCUMENT"; record: DocumentRecord }
   | { type: "TRANSFER_DECISION"; beneficiaryId: string; decision: "blocked" | "override"; title: string }
+  | { type: "RECORD_PAYMENT"; payment: PaymentRecord }
   | { type: "SELECT_CUSTOMER"; id: string }
   | { type: "SETTINGS"; settings: Partial<AppState["settings"]> }
   | { type: "NOTIFICATIONS_SEEN" }
@@ -428,6 +430,30 @@ export function reducer(state: AppState, action: Action): AppState {
         ],
         toasts: [...state.toasts, { id: uid("t"), text: action.decision === "blocked" ? "Transfer cancelled. Your money is safe." : "Noted. This is a demo — no payment was made.", tone: action.decision === "blocked" ? "good" : "info" }],
       };
+    case "RECORD_PAYMENT": {
+      const p = action.payment;
+      if (state.payments.some((x) => x.id === p.id && x.status === p.status)) return state;
+      const received = p.status === "TXN_SUCCESS";
+      const label = p.source === "paytm-staging" ? "Paytm staging" : "Simulated";
+      return {
+        ...state,
+        payments: [p, ...state.payments.filter((x) => x.id !== p.id)],
+        audit: [
+          audit({
+            kind: "payment_received",
+            agent: "Orchestrator",
+            what: received ? `Payment received · ${formatINR(p.amount)} (${label})` : `Payment ${p.status === "PENDING" ? "pending" : "failed"} · ${formatINR(p.amount)} (${label})`,
+            why: p.note || "Collected from the QR screen",
+            expected: "Verified with Paytm before it counts",
+            status: received ? "Done" : "Blocked",
+            result: [p.txnId && `Txn ${p.txnId}`, p.paymentMode, p.source === "paytm-staging" ? "test money only" : "no money moved"].filter(Boolean).join(" · "),
+            route: { name: "qr" },
+          }),
+          ...state.audit,
+        ],
+        toasts: [...state.toasts, { id: uid("t"), text: received ? `${formatINR(p.amount)} received · ${label}` : `Payment ${p.status === "PENDING" ? "is still pending" : "failed"} — not counted`, tone: received ? "good" : "bad" }],
+      };
+    }
     case "SELECT_CUSTOMER":
       return { ...state, selectedCustomerId: action.id };
     case "SETTINGS":

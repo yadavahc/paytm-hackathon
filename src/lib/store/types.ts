@@ -71,10 +71,22 @@ export interface Campaign {
   final?: CampaignSnapshot;
 }
 
+export interface PaymentRecord {
+  /** Paytm orderId (or a simulated id). */
+  id: string;
+  amount: number;
+  note: string;
+  status: "TXN_SUCCESS" | "TXN_FAILURE" | "PENDING";
+  source: "paytm-staging" | "simulated";
+  txnId?: string;
+  paymentMode?: string;
+  at: number;
+}
+
 export interface AuditEntry {
   id: string;
   at: number;
-  kind: ActionKind | "transfer_blocked" | "transfer_override" | "pattern_confirmed";
+  kind: ActionKind | "transfer_blocked" | "transfer_override" | "pattern_confirmed" | "payment_received";
   agent: AgentName;
   what: string;
   why: string;
@@ -172,6 +184,7 @@ export interface AppState {
   catalog: CatalogItem[];
   documents: DocumentRecord[];
   savedInsights: { id: string; title: string; detail: string; at: number }[];
+  payments: PaymentRecord[];
   audit: AuditEntry[];
   learnings: Learning[];
   calibration: number;
