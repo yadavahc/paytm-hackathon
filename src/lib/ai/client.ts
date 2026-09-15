@@ -9,6 +9,8 @@ export interface HealthStatus {
   fallbacks: string[];
   vision: string | null;
   voice: boolean;
+  /** "Paytm staging" when real sandbox payments are configured. */
+  payments: string | null;
 }
 
 /**
@@ -42,6 +44,6 @@ export async function fetchHealth(): Promise<HealthStatus> {
     if (!res.ok) throw new Error();
     return (await res.json()) as HealthStatus;
   } catch {
-    return { ai: false, provider: null, model: null, fallbacks: [], vision: null, voice: false };
+    return { ai: false, provider: null, model: null, fallbacks: [], vision: null, voice: false, payments: null };
   }
 }

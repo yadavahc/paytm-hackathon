@@ -77,7 +77,7 @@ function loadState(): AppState {
 
 export function MaadiStoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, loadState);
-  const [health, setHealth] = useState<HealthStatus>({ ai: false, provider: null, model: null, fallbacks: [], vision: null, voice: false });
+  const [health, setHealth] = useState<HealthStatus>({ ai: false, provider: null, model: null, fallbacks: [], vision: null, voice: false, payments: null });
   const [busy, setBusy] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [sheet, setSheet] = useState<SheetState>(null);
