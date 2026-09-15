@@ -1,0 +1,30 @@
+{
+  "name": "paytm-maadi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Paytm Maadi — AI merchant growth partner (hackathon prototype). You say it. AI gets it done.",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
+    "framer-motion": "^12.43.0",
+    "lucide-react": "^0.577.0",
+    "next": "^15.5.25",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^2.15.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9.0"
+  }
+}
