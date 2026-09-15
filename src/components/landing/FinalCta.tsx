@@ -11,7 +11,7 @@ export function FinalCta() {
     <section className="relative overflow-hidden bg-deep px-5 py-28 text-center text-white sm:py-40" aria-labelledby="cta-title">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 flex h-56 items-end justify-center gap-[6px] opacity-40 [mask-image:linear-gradient(to_top,black,transparent)]">
         {Array.from({ length: 64 }, (_, i) => (
-          <span key={i} className="w-[5px] origin-bottom rounded-t-full bg-sky" style={{ height: `${30 + ((i * 53) % 170)}px`, animation: "var(--animate-wave)", animationDelay: `${(i % 9) * 0.13}s`, animationDuration: `${1.2 + (i % 5) * 0.2}s` }} />
+          <span key={i} className="w-[5px] origin-bottom animate-wave rounded-t-full bg-sky" style={{ height: `${30 + ((i * 53) % 170)}px`, animationDelay: `${(i % 9) * 0.13}s`, animationDuration: `${1.2 + (i % 5) * 0.2}s` }} />
         ))}
       </div>
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(0,185,241,0.22),transparent)]" />

@@ -167,10 +167,9 @@ export function VoiceOverlay() {
               {Array.from({ length: 18 }, (_, i) => (
                 <span
                   key={i}
-                  className="w-1 rounded-full bg-sky/80"
+                  className={cn("w-1 rounded-full bg-sky/80", phase === "listening" && "animate-wave")}
                   style={{
                     height: phase === "listening" ? `${14 + ((i * 37) % 26)}px` : "6px",
-                    animation: phase === "listening" ? "var(--animate-wave)" : "none",
                     animationDelay: `${(i % 6) * 0.09}s`,
                   }}
                 />

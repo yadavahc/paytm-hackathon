@@ -108,7 +108,7 @@ function MerchantBubble({ text }: { text: string }) {
           <Mic className="size-3" aria-hidden /> Voice · Kanglish
           <span className="ml-1 flex h-3 items-end gap-[2px]" aria-hidden>
             {[0, 1, 2, 3, 4].map((i) => (
-              <span key={i} className="w-[2px] rounded-full bg-sky" style={{ height: 10, animation: "var(--animate-wave)", animationDelay: `${i * 0.1}s`, transformOrigin: "bottom" }} />
+              <span key={i} className="w-[2px] animate-wave rounded-full bg-sky" style={{ height: 10, animationDelay: `${i * 0.1}s`, transformOrigin: "bottom" }} />
             ))}
           </span>
         </span>

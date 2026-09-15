@@ -19,7 +19,8 @@ export function MaadiMark({ size = 28, className, animated = false }: { size?: n
             height={[8, 15, 11, 4][i]}
             rx="1.3"
             fill="currentColor"
-            style={animated ? { transformOrigin: `${x}px 12px`, animation: `var(--animate-wave)`, animationDelay: `${i * 0.12}s` } : undefined}
+            className={animated ? "animate-wave" : undefined}
+            style={{ transformOrigin: `${x}px 12px`, animationDelay: `${i * 0.12}s` }}
           />
         ))}
       </svg>

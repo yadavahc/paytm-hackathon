@@ -94,7 +94,7 @@ export function VoiceSection() {
             </div>
             <div className="mt-6 flex h-10 items-center gap-1" aria-hidden>
               {Array.from({ length: 22 }, (_, i) => (
-                <span key={i} className="w-1 rounded-full bg-sky/80" style={{ height: phase === 0 ? `${12 + ((i * 29) % 26)}px` : "5px", animation: phase === 0 ? "var(--animate-wave)" : "none", animationDelay: `${(i % 7) * 0.08}s`, transition: "height .3s" }} />
+                <span key={i} className={cn("w-1 rounded-full bg-sky/80", phase === 0 && "animate-wave")} style={{ height: phase === 0 ? `${12 + ((i * 29) % 26)}px` : "5px", animationDelay: `${(i % 7) * 0.08}s`, transition: "height .3s" }} />
               ))}
             </div>
             <p className="mt-5 min-h-[60px] text-center text-[20px] font-semibold leading-snug" lang={l.key === "kannada" ? "kn" : l.key === "hindi" ? "hi" : "en"}>
