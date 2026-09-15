@@ -5,9 +5,16 @@ const BASE = "https://api.sarvam.ai";
 
 export const sarvamAvailable = () => Boolean(process.env.SARVAM_API_KEY);
 
+const EXTENSION: Record<string, string> = { "audio/webm": "webm", "audio/ogg": "ogg", "audio/mp4": "m4a", "audio/mpeg": "mp3", "audio/wav": "wav", "audio/x-wav": "wav", "audio/aac": "aac", "audio/flac": "flac" };
+
 export async function transcribe(audio: Blob, fileName: string): Promise<{ transcript: string; languageCode: string | null }> {
+  // Browsers label recordings like "audio/webm;codecs=opus". Sarvam rejects the codec suffix,
+  // so send the bare media type with a matching file extension.
+  const baseType = (audio.type.split(";")[0] || "audio/webm").trim().toLowerCase();
+  const ext = EXTENSION[baseType] ?? fileName.split(".").pop() ?? "webm";
+  const clean = new Blob([await audio.arrayBuffer()], { type: baseType });
   const form = new FormData();
-  form.append("file", audio, fileName);
+  form.append("file", clean, `speech.${ext}`);
   form.append("model", "saaras:v3");
   form.append("mode", "translit");
   form.append("language_code", "unknown");
